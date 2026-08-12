@@ -1,16 +1,22 @@
 import type { Metadata } from "next";
+import { SiteFooter } from "@/components/site-footer";
+import { SiteHeader } from "@/components/site-header";
+import { siteInfo } from "@/data/site";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Game Designer Portfolio | 游戏策划作品集",
-  description:
-    "专注玩法设计、系统设计、关卡设计与游戏体验的游戏策划个人作品集。",
+  title: siteInfo.title,
+  description: siteInfo.description,
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="zh-CN" className="h-full antialiased">
-      <body className="flex min-h-full flex-col">{children}</body>
+      <body className="flex min-h-full flex-col">
+        <SiteHeader />
+        <div className="flex flex-1 flex-col">{children}</div>
+        <SiteFooter />
+      </body>
     </html>
   );
 }
