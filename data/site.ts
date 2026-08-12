@@ -5,7 +5,7 @@ type FeaturedContent = {
   description: string;
   coverClass: string;
   contentLabel: "PROJECT" | "ARTICLE" | "GAME DESIGN" | "CASE STUDY";
-  href: string;
+  href: string | null;
   featured: boolean;
   featuredOrder: number;
 };
@@ -52,7 +52,7 @@ export const navigation = [
 export const projects: Project[] = [
   {
     kind: "project",
-    slug: "godot-game-project",
+    slug: "godot-game",
     index: "01",
     title: "Godot 游戏项目",
     type: "个人游戏项目",
@@ -61,7 +61,7 @@ export const projects: Project[] = [
     tags: ["Godot", "Game Development", "Game Design"],
     coverClass: "work-cover--godot",
     contentLabel: "PROJECT",
-    href: "/projects#godot-game-project",
+    href: "/projects/godot-game",
     featured: true,
     featuredOrder: 1,
   },
@@ -83,7 +83,7 @@ export const writings: Writing[] = [
     status: "即将发布",
     coverClass: "work-cover--ugc",
     contentLabel: "ARTICLE",
-    href: "/writing#ugc-industry-observation",
+    href: null,
     featured: true,
     featuredOrder: 2,
   },
@@ -98,7 +98,7 @@ export const writings: Writing[] = [
     status: "即将发布",
     coverClass: "work-cover--auto-chess",
     contentLabel: "GAME DESIGN",
-    href: "/writing#auto-chess-design",
+    href: null,
     featured: true,
     featuredOrder: 3,
   },
@@ -113,7 +113,7 @@ export const writings: Writing[] = [
     status: "即将发布",
     coverClass: "work-cover--stormveil",
     contentLabel: "CASE STUDY",
-    href: "/writing#stormveil-castle-case-study",
+    href: null,
     featured: true,
     featuredOrder: 4,
   },

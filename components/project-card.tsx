@@ -12,7 +12,7 @@ export function ProjectCard({ project, tone = "dark" }: ProjectCardProps) {
   return (
     <article id={project.slug} className="project-card group min-w-0 scroll-mt-28">
       <Link
-        href={`/projects#${project.slug}`}
+        href={project.href ?? "/projects"}
         className="block focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#da5c38]"
         aria-label={`查看项目：${project.title}`}
       >
