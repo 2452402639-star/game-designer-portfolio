@@ -41,6 +41,24 @@ export default async function ProjectDetailPage({
   const overview = sections.get("overview");
   const development = sections.get("design-and-development");
   const reflection = sections.get("reflection");
+  const developmentTopics = development
+    ? [...development.matchAll(/^###\s+(.+)$/gm)].map((match) => match[1].trim())
+    : [];
+  const builtGroups = [
+    {
+      title: "敌人与战斗",
+      items: ["敌人生成与状态管理", "Boss", "战斗数据"],
+    },
+    { title: "关卡循环", items: ["波次与关卡配置"] },
+    { title: "局外系统", items: ["装备系统", "仓库系统"] },
+    { title: "体验表现", items: ["HUD", "交互系统"] },
+  ].map((group) => ({
+    ...group,
+    items: group.items.filter((item) => frontmatter.implemented.includes(item)),
+  }));
+  const titleParts = frontmatter.title.split(" ");
+  const titleLead = titleParts.shift();
+  const titleRest = titleParts.join(" ");
 
   return (
     <main>
@@ -51,12 +69,16 @@ export default async function ProjectDetailPage({
             ← 返回作品
           </Link>
 
-          <div className="mt-16 grid gap-12 lg:grid-cols-[1.4fr_0.6fr] lg:items-end">
+          <div className="mt-16 grid gap-12 lg:grid-cols-[1.5fr_0.5fr] lg:items-end">
             <div>
               <span className="page-kicker">PROJECT CASE STUDY / 01</span>
-              <h1 className="mt-7 max-w-5xl text-[clamp(3.4rem,9vw,7.5rem)] font-semibold leading-[0.92] tracking-[-0.065em]">
-                {frontmatter.title}
-                <span className="text-[#da5c38]">.</span>
+              <h1 className="case-title">
+                <span>{titleLead}</span>
+                {titleRest && (
+                  <span>
+                    {titleRest}<span className="text-[#da5c38]">.</span>
+                  </span>
+                )}
               </h1>
               <p className="mt-7 text-lg font-semibold tracking-[-0.02em] text-[#d2d7d2] sm:text-2xl">
                 {frontmatter.type}
@@ -113,11 +135,18 @@ export default async function ProjectDetailPage({
         </div>
         <div className="case-section__content">
           <h2>已实现内容</h2>
-          <div className="built-list">
-            {frontmatter.implemented.map((item, index) => (
-              <div key={item}>
-                <span>{String(index + 1).padStart(2, "0")}</span>
-                <p>{item}</p>
+          <div className="built-groups">
+            {builtGroups.map((group, groupIndex) => (
+              <div key={group.title} className="built-group">
+                <div className="built-group__heading">
+                  <span>{String(groupIndex + 1).padStart(2, "0")}</span>
+                  <h3>{group.title}</h3>
+                </div>
+                <ul>
+                  {group.items.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
               </div>
             ))}
           </div>
@@ -131,7 +160,20 @@ export default async function ProjectDetailPage({
         </div>
         <div className="case-section__content">
           <h2>设计与开发</h2>
-          {development && <MarkdownContent>{development}</MarkdownContent>}
+          <div className="development-outline">
+            <ul aria-label="待整理章节">
+              {developmentTopics.map((topic, index) => (
+                <li key={topic}>
+                  <span>{String(index + 1).padStart(2, "0")}</span>
+                  {topic}
+                </li>
+              ))}
+            </ul>
+            <div className="content-pending">
+              <span className="size-2 bg-[#94a66c]" aria-hidden="true" />
+              <p>内容整理中</p>
+            </div>
+          </div>
         </div>
       </section>
 
