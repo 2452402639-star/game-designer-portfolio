@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { writingCategories, writings } from "@/data/site";
 
 export const metadata: Metadata = {
@@ -43,8 +44,15 @@ export default function WritingPage() {
             <article
               id={writing.slug}
               key={writing.slug}
-              className="grid scroll-mt-28 gap-5 border-b border-[#191c1b]/15 py-8 sm:grid-cols-[70px_1fr_auto] sm:items-start sm:gap-8 sm:py-10"
+              className="group relative grid scroll-mt-28 gap-5 border-b border-[#191c1b]/15 py-8 sm:grid-cols-[70px_1fr_auto] sm:items-start sm:gap-8 sm:py-10"
             >
+              {writing.href ? (
+                <Link
+                  href={writing.href}
+                  className="absolute inset-0 z-10 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#da5c38]"
+                  aria-label={`阅读：${writing.title}`}
+                />
+              ) : null}
               <span className="font-mono text-xs text-[#da5c38]">
                 {writing.index}
               </span>
@@ -54,7 +62,7 @@ export default function WritingPage() {
                   <span aria-hidden="true">/</span>
                   <span>{writing.category}</span>
                 </div>
-                <h2 className="mt-3 text-2xl font-semibold tracking-[-0.035em] sm:text-3xl">
+                <h2 className="mt-3 text-2xl font-semibold tracking-[-0.035em] transition-colors group-hover:text-[#c84f2e] sm:text-3xl">
                   {writing.title}
                 </h2>
                 <p className="mt-4 text-sm leading-7 text-[#626763]">

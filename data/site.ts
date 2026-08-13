@@ -21,7 +21,7 @@ export type WritingCategory = "行业观察" | "游戏设计" | "关卡设计 / 
 export type Writing = FeaturedContent & {
   kind: "writing";
   category: WritingCategory;
-  status: "即将发布";
+  status: "即将发布" | "已整理";
 };
 
 export type SelectedWork = Project | Writing;
@@ -104,16 +104,16 @@ export const writings: Writing[] = [
   },
   {
     kind: "writing",
-    slug: "stormveil-castle-case-study",
+    slug: "stormveil-castle",
     index: "03",
-    title: "史东薇尔城关卡拆解",
+    title: "《艾尔登法环》史东薇尔城关卡设计拆解",
     category: "关卡设计 / Case Study",
     description:
-      "围绕《艾尔登法环》史东薇尔城的空间结构、探索路径、引导方式与关卡体验进行拆解。",
-    status: "即将发布",
+      "从关卡策划视角拆解史东薇尔城如何在复杂箱庭中维持清晰的初见体验。",
+    status: "已整理",
     coverClass: "work-cover--stormveil",
     contentLabel: "CASE STUDY",
-    href: null,
+    href: "/writing/stormveil-castle",
     featured: true,
     featuredOrder: 4,
   },

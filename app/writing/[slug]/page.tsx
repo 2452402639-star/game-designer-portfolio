@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MarkdownContent } from "@/components/markdown-content";
+import { StormveilStudy } from "@/components/stormveil-study";
 import { getContentBySlug, getContentSlugs } from "@/lib/content";
 
 export const dynamicParams = false;
@@ -18,6 +19,13 @@ export async function generateMetadata({
 
   if (!article) return {};
 
+  if (slug === "stormveil-castle") {
+    return {
+      title: "《艾尔登法环》史东薇尔城关卡设计拆解 | 小不理",
+      description: article.frontmatter.description,
+    };
+  }
+
   return {
     title: `${article.frontmatter.title} | 小不理`,
     description: article.frontmatter.description,
@@ -31,6 +39,10 @@ export default async function WritingDetailPage({
   const article = getContentBySlug("writing", slug);
 
   if (!article) notFound();
+
+  if (slug === "stormveil-castle") {
+    return <StormveilStudy article={article} />;
+  }
 
   return (
     <main className="mx-auto w-full max-w-[1240px] px-5 py-16 sm:px-8 sm:py-24 lg:px-10 lg:py-28">

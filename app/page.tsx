@@ -166,10 +166,17 @@ export default function Home() {
             {selectedWorks.filter((work) => work.kind === "writing").map((article) => (
               <article
                 key={article.title}
-                className="article-card flex min-h-[340px] flex-col bg-[#e7e4dc] p-6 sm:p-8"
+                className="article-card relative flex min-h-[340px] flex-col bg-[#e7e4dc] p-6 sm:p-8"
               >
+                {article.href ? (
+                  <Link
+                    href={article.href}
+                    className="absolute inset-0 z-10 focus-visible:outline-2 focus-visible:outline-offset-[-3px] focus-visible:outline-[#da5c38]"
+                    aria-label={`阅读：${article.title}`}
+                  />
+                ) : null}
                 <div className="flex items-center justify-between font-mono text-[10px] tracking-[0.1em] text-[#777c78]">
-                  <span>即将发布</span>
+                  <span>{article.status}</span>
                   <span>{article.category}</span>
                 </div>
                 <span className="mt-12 font-mono text-xs text-[#da5c38]">
@@ -182,7 +189,7 @@ export default function Home() {
                   {article.description}
                 </p>
                 <span className="mt-auto pt-8 font-mono text-[10px] tracking-[0.12em] text-[#777c78]">
-                  COMING SOON
+                  {article.href ? "READ STUDY ↗" : "COMING SOON"}
                 </span>
               </article>
             ))}
