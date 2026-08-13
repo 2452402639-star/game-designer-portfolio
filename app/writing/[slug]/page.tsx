@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { AutochessStudy } from "@/components/autochess-study";
 import { MarkdownContent } from "@/components/markdown-content";
 import { StormveilStudy } from "@/components/stormveil-study";
 import { getContentBySlug, getContentSlugs } from "@/lib/content";
@@ -26,6 +27,13 @@ export async function generateMetadata({
     };
   }
 
+  if (slug === "autochess-declaration-system") {
+    return {
+      title: "自走棋赛季机制设计：宣告系统 & 吟游诗人 | 小不理",
+      description: article.frontmatter.description,
+    };
+  }
+
   return {
     title: `${article.frontmatter.title} | 小不理`,
     description: article.frontmatter.description,
@@ -42,6 +50,10 @@ export default async function WritingDetailPage({
 
   if (slug === "stormveil-castle") {
     return <StormveilStudy article={article} />;
+  }
+
+  if (slug === "autochess-declaration-system") {
+    return <AutochessStudy article={article} />;
   }
 
   return (

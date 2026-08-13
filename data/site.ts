@@ -4,7 +4,7 @@ type FeaturedContent = {
   title: string;
   description: string;
   coverClass: string;
-  contentLabel: "PROJECT" | "ARTICLE" | "GAME DESIGN" | "CASE STUDY";
+  contentLabel: "PROJECT" | "ARTICLE" | "GAME DESIGN" | "CASE STUDY" | "SYSTEM DESIGN";
   href: string | null;
   featured: boolean;
   featuredOrder: number;
@@ -16,7 +16,7 @@ export type Project = FeaturedContent & {
   tags: string[];
 };
 
-export type WritingCategory = "行业观察" | "游戏设计" | "关卡设计 / Case Study";
+export type WritingCategory = "行业观察" | "游戏设计" | "系统设计" | "关卡设计 / Case Study";
 
 export type Writing = FeaturedContent & {
   kind: "writing";
@@ -89,16 +89,16 @@ export const writings: Writing[] = [
   },
   {
     kind: "writing",
-    slug: "auto-chess-design",
+    slug: "autochess-declaration-system",
     index: "02",
-    title: "自走棋设计文章",
-    category: "游戏设计",
+    title: "宣告系统 & 吟游诗人",
+    category: "系统设计",
     description:
-      "围绕自走棋玩法、阵容构筑、机制设计与玩家决策进行分析和设计思考。",
-    status: "即将发布",
+      "围绕“公开承诺 vs 灵活构筑”，设计一套从 2-1 宣告到 3-1 二次决策的自走棋赛季机制，并拆解多人竞争、转型成本、自由构筑与反最优解。",
+    status: "已整理",
     coverClass: "work-cover--auto-chess",
-    contentLabel: "GAME DESIGN",
-    href: null,
+    contentLabel: "SYSTEM DESIGN",
+    href: "/writing/autochess-declaration-system",
     featured: true,
     featuredOrder: 3,
   },
@@ -126,6 +126,7 @@ export const selectedWorks: SelectedWork[] = [...projects, ...writings]
 export const writingCategories = [
   "行业观察",
   "游戏设计",
+  "系统设计",
   "关卡设计 / Case Study",
 ] as const;
 
