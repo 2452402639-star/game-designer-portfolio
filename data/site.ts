@@ -4,7 +4,11 @@ type FeaturedContent = {
   title: string;
   description: string;
   coverClass: string;
+  tags: string[];
   contentLabel: "PROJECT" | "ARTICLE" | "GAME DESIGN" | "CASE STUDY" | "SYSTEM DESIGN";
+  featuredLabel: "PERSONAL PROJECT" | "ARTICLE" | "SYSTEM DESIGN" | "LEVEL DESIGN / CASE STUDY";
+  featuredTags: string[];
+  featuredDescription: string;
   href: string | null;
   featured: boolean;
   featuredOrder: number;
@@ -13,7 +17,6 @@ type FeaturedContent = {
 export type Project = FeaturedContent & {
   kind: "project";
   type: "个人游戏项目";
-  tags: string[];
 };
 
 export type WritingCategory = "行业观察" | "游戏设计" | "系统设计" | "关卡设计 / Case Study";
@@ -21,7 +24,7 @@ export type WritingCategory = "行业观察" | "游戏设计" | "系统设计" |
 export type Writing = FeaturedContent & {
   kind: "writing";
   category: WritingCategory;
-  status: "即将发布" | "已整理";
+  status: "即将发布" | "已整理" | "已发布";
 };
 
 export type SelectedWork = Project | Writing;
@@ -61,6 +64,9 @@ export const projects: Project[] = [
     tags: ["Godot", "Game Development", "Game Design"],
     coverClass: "work-cover--godot",
     contentLabel: "PROJECT",
+    featuredLabel: "PERSONAL PROJECT",
+    featuredTags: ["Gameplay", "System", "Prototype"],
+    featuredDescription: "从玩法定位、系统循环到数值迭代，完整跑通一个可玩的游戏原型。",
     href: "/projects/godot-game",
     featured: true,
     featuredOrder: 1,
@@ -79,13 +85,17 @@ export const writings: Writing[] = [
     index: "01",
     title: "UGC 行业观察",
     category: "行业观察",
-    description: "围绕 UGC 游戏与内容生态进行整理、研究与个人思考。",
-    status: "即将发布",
+    description: "从内容供给、分发、创作者经济与平台治理，分析为什么头部游戏正在集体押注 UGC。",
+    tags: ["UGC", "Industry Research", "Content Ecosystem"],
+    status: "已发布",
     coverClass: "work-cover--ugc",
     contentLabel: "ARTICLE",
-    href: null,
-    featured: true,
-    featuredOrder: 2,
+    featuredLabel: "ARTICLE",
+    featuredTags: ["UGC", "Industry Research", "Content Ecosystem"],
+    featuredDescription: "围绕 UGC 游戏与内容生态进行整理、研究与个人思考。",
+    href: "/writing/ugc-industry-observation",
+    featured: false,
+    featuredOrder: 0,
   },
   {
     kind: "writing",
@@ -95,12 +105,16 @@ export const writings: Writing[] = [
     category: "系统设计",
     description:
       "围绕“公开承诺 vs 灵活构筑”，设计一套从 2-1 宣告到 3-1 二次决策的自走棋赛季机制，并拆解多人竞争、转型成本、自由构筑与反最优解。",
+    tags: ["Auto Chess", "Decision Design", "Meta System"],
     status: "已整理",
     coverClass: "work-cover--auto-chess",
     contentLabel: "SYSTEM DESIGN",
+    featuredLabel: "SYSTEM DESIGN",
+    featuredTags: ["Auto Chess", "Decision Design", "Meta System"],
+    featuredDescription: "围绕阵容承诺、转型成本与反最优解，设计一套自走棋赛季机制概念。",
     href: "/writing/autochess-declaration-system",
     featured: true,
-    featuredOrder: 3,
+    featuredOrder: 2,
   },
   {
     kind: "writing",
@@ -110,12 +124,16 @@ export const writings: Writing[] = [
     category: "关卡设计 / Case Study",
     description:
       "从关卡策划视角拆解史东薇尔城如何在复杂箱庭中维持清晰的初见体验。",
+    tags: ["Level Design", "Player Guidance", "Pacing"],
     status: "已整理",
     coverClass: "work-cover--stormveil",
     contentLabel: "CASE STUDY",
+    featuredLabel: "LEVEL DESIGN / CASE STUDY",
+    featuredTags: ["Level Design", "Player Guidance", "Pacing"],
+    featuredDescription: "从空间结构、路线权重、软引导与节奏，分析复杂箱庭如何保持可读性。",
     href: "/writing/stormveil-castle",
     featured: true,
-    featuredOrder: 4,
+    featuredOrder: 3,
   },
 ];
 
@@ -135,24 +153,24 @@ export const disciplines = [
     index: "01",
     title: "玩法设计",
     english: "GAMEPLAY",
-    description: "从核心动词出发，梳理规则、反馈与玩家选择之间的关系。",
+    description: "从核心动作与目标出发，设计玩家行为、反馈与决策空间。",
   },
   {
     index: "02",
     title: "系统设计",
     english: "SYSTEMS",
-    description: "围绕目标、资源和循环，整理可读、可验证的系统方案。",
+    description: "建立资源循环、成长结构与规则关系，并通过原型验证体验。",
   },
   {
     index: "03",
     title: "关卡设计",
-    english: "LEVELS",
-    description: "通过空间、节奏与引导，练习组织玩家的行动和体验。",
+    english: "LEVEL DESIGN",
+    description: "利用空间、节奏、视线、风险与奖励，组织玩家行动。",
   },
   {
     index: "04",
     title: "游戏分析",
     english: "ANALYSIS",
-    description: "拆解游戏体验与设计结构，沉淀可复用的学习笔记。",
+    description: "从玩家体验反推设计结构，将优秀案例转化为可复用的方法。",
   },
 ] as const;

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { SelectedWorkCard } from "@/components/selected-work-card";
-import { disciplines, projects, selectedWorks, siteInfo } from "@/data/site";
+import { disciplines, selectedWorks, writings } from "@/data/site";
 
 function ArrowIcon() {
   return <span aria-hidden="true">↗</span>;
@@ -24,14 +24,14 @@ export default function Home() {
               Designer<span className="text-[#da5c38]">.</span>
             </span>
             <span className="mt-8 block text-2xl tracking-[-0.03em] text-[#3e4441] sm:text-3xl">
-              游戏策划
+              游戏策划｜玩法 · 系统 · 关卡
             </span>
           </h1>
 
           <p className="mt-7 max-w-xl text-base leading-8 text-[#5b605d] sm:mt-9 sm:text-lg">
-            关注玩法设计、系统设计、关卡设计与游戏体验。
+            通过原型实践、机制设计与游戏拆解，持续验证自己的设计判断。
             <br className="hidden sm:block" />
-            记录项目实践、设计方案与持续学习的过程。
+            关注玩家决策、系统循环、关卡引导与游戏体验。
           </p>
 
           <div className="mt-9 flex flex-wrap gap-3 sm:mt-11">
@@ -60,14 +60,14 @@ export default function Home() {
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div className="console-cell">
-                <span className="console-label">FOCUS</span>
-                <strong>{String(disciplines.length).padStart(2, "0")}</strong>
-                <span>设计方向</span>
+                <span className="console-label">CASE STUDIES</span>
+                <strong>{String(selectedWorks.length).padStart(2, "0")}</strong>
+                <span>正式案例</span>
               </div>
               <div className="console-cell">
-                <span className="console-label">PROJECTS</span>
-                <strong>{String(projects.length).padStart(2, "0")}</strong>
-                <span>项目草稿</span>
+                <span className="console-label">DESIGN AREAS</span>
+                <strong>03</strong>
+                <span>玩法 · 系统 · 关卡</span>
               </div>
             </div>
             <div className="flex items-end gap-1" aria-hidden="true">
@@ -91,12 +91,12 @@ export default function Home() {
             <div>
               <span className="section-kicker text-[#aeb4af]">01 / SELECTED WORKS</span>
               <h2 className="mt-4 text-4xl font-semibold tracking-[-0.045em] sm:text-5xl">
-                精选内容
+                精选作品
               </h2>
             </div>
             <div className="max-w-sm">
               <p className="text-sm leading-7 text-[#aeb4af]">
-                个人游戏项目、游戏设计研究与策划文章的长期合集。
+                三份正式 Case Study，分别呈现原型实践、系统设计与关卡分析。
               </p>
               <Link className="section-more text-[#f3f1eb]" href="/projects">
                 查看全部作品 <ArrowIcon />
@@ -104,7 +104,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="mt-12 grid gap-10 sm:grid-cols-2 sm:gap-x-5 sm:gap-y-12 lg:mt-16 lg:grid-cols-4 lg:gap-6">
+          <div className="mt-12 grid gap-10 sm:grid-cols-2 sm:gap-x-5 sm:gap-y-12 lg:mt-16 lg:grid-cols-3 lg:gap-7">
             {selectedWorks.map((work) => (
               <SelectedWorkCard key={`${work.kind}-${work.slug}`} work={work} />
             ))}
@@ -121,7 +121,7 @@ export default function Home() {
             </h2>
           </div>
           <p className="max-w-sm text-sm leading-7 text-[#686d69]">
-            围绕游戏体验持续学习，将想法整理成可讨论、可验证的设计方案。
+            围绕玩家行为、系统关系和空间体验，将设计判断转化为可验证方案。
           </p>
         </div>
 
@@ -156,6 +156,9 @@ export default function Home() {
               <h2 className="mt-4 text-4xl font-semibold tracking-[-0.045em] sm:text-5xl">
                 设计与研究
               </h2>
+              <p className="mt-4 max-w-md text-sm leading-7 text-[#686d69]">
+                长期记录游戏设计文章、案例拆解与研究内容。
+              </p>
             </div>
             <Link className="section-more" href="/writing">
               浏览全部文章 <ArrowIcon />
@@ -163,7 +166,7 @@ export default function Home() {
           </div>
 
           <div className="mt-12 grid gap-px overflow-hidden border border-[#191c1b]/15 bg-[#191c1b]/15 md:grid-cols-3 lg:mt-16">
-            {selectedWorks.filter((work) => work.kind === "writing").map((article) => (
+            {writings.map((article) => (
               <article
                 key={article.title}
                 className="article-card relative flex min-h-[340px] flex-col bg-[#e7e4dc] p-6 sm:p-8"
@@ -189,7 +192,11 @@ export default function Home() {
                   {article.description}
                 </p>
                 <span className="mt-auto pt-8 font-mono text-[10px] tracking-[0.12em] text-[#777c78]">
-                  {article.href ? "READ STUDY ↗" : "COMING SOON"}
+                  {article.href
+                    ? article.contentLabel === "ARTICLE"
+                      ? "READ ARTICLE ↗"
+                      : "READ STUDY ↗"
+                    : "COMING SOON"}
                 </span>
               </article>
             ))}
@@ -211,10 +218,15 @@ export default function Home() {
           </div>
           <div>
             <h2 className="max-w-3xl text-3xl font-semibold leading-[1.3] tracking-[-0.045em] sm:text-5xl sm:leading-[1.2]">
-              持续学习玩法设计、系统设计、关卡设计与游戏开发。
+              通过原型、游玩与拆解验证设计。
             </h2>
             <p className="mt-9 max-w-2xl border-t border-[#191c1b]/15 pt-8 text-sm leading-7 text-[#5f6460]">
-              {siteInfo.about[1]}这个网站用于长期记录我的项目、设计方案、玩法拆解与学习过程。
+              我关注的不只是“一个设计看起来是否合理”，而是它进入游戏之后，玩家是否真的会按照预期行动。
+              <br /><br />
+              因此我习惯通过原型、实际游玩、拆解与复盘验证设计判断，并持续将这些过程整理成项目与 Case Study。
+            </p>
+            <p className="mt-5 max-w-2xl font-mono text-[10px] leading-6 tracking-[0.04em] text-[#777c78]">
+              目前持续进行 Unity 原型实践，并关注玩法设计、系统设计与关卡设计。
             </p>
             <Link className="section-more mt-8" href="/about">
               了解更多 <ArrowIcon />

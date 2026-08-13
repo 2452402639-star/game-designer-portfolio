@@ -13,6 +13,10 @@ const imageDimensions: Record<string, { width: number; height: number }> = {
   "/writing/stormveil-castle/banished-knight.jpg": { width: 819, height: 365 },
   "/writing/stormveil-castle/pacing-example.jpg": { width: 819, height: 365 },
   "/writing/stormveil-castle/whitebox-workflow.jpg": { width: 1500, height: 780 },
+  "/writing/ugc-industry-observation/ugc-ecosystem-data.jpg": { width: 2089, height: 1229 },
+  "/writing/ugc-industry-observation/ugc-growth-flywheel.jpg": { width: 1834, height: 1433 },
+  "/writing/ugc-industry-observation/ugc-five-layer-model.jpg": { width: 1919, height: 1263 },
+  "/writing/ugc-industry-observation/ugc-officialization-funnel.jpg": { width: 1634, height: 962 },
 };
 
 function headingId(children: ReactNode) {

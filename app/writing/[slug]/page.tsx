@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { AutochessStudy } from "@/components/autochess-study";
+import { UgcIndustryStudy } from "@/components/ugc-industry-study";
 import { MarkdownContent } from "@/components/markdown-content";
 import { StormveilStudy } from "@/components/stormveil-study";
 import { getContentBySlug, getContentSlugs } from "@/lib/content";
@@ -34,6 +35,13 @@ export async function generateMetadata({
     };
   }
 
+  if (slug === "ugc-industry-observation") {
+    return {
+      title: "不是缺地图，而是缺生态：为什么大厂开始集体押注 UGC？ | 小不理",
+      description: article.frontmatter.description,
+    };
+  }
+
   return {
     title: `${article.frontmatter.title} | 小不理`,
     description: article.frontmatter.description,
@@ -54,6 +62,10 @@ export default async function WritingDetailPage({
 
   if (slug === "autochess-declaration-system") {
     return <AutochessStudy article={article} />;
+  }
+
+  if (slug === "ugc-industry-observation") {
+    return <UgcIndustryStudy article={article} />;
   }
 
   return (
