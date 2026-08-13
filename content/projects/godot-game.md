@@ -29,7 +29,10 @@ implemented:
 gallerySlots: 3
 build:
   platform: Windows 测试版
-  url: ""
+  version: AI Brush Rush v1.0
+  provider: 夸克网盘
+  url: https://pan.quark.cn/s/b9ee68b2634d
+  extractionCode: 6UYH
 ---
 
 ## overview

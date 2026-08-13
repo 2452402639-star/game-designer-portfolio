@@ -927,6 +927,41 @@ button.filter-button {
   font-weight: 650;
 }
 
+.build-panel__details {
+  display: grid;
+  min-width: 0;
+  gap: 1.25rem;
+}
+
+.build-panel__details > div {
+  min-width: 0;
+}
+
+.build-panel__details dt {
+  font-family: var(--font-ui-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.14em;
+  color: #747975;
+}
+
+.build-panel__details dd {
+  margin-top: 0.5rem;
+  overflow-wrap: anywhere;
+  font-size: 1rem;
+  font-weight: 650;
+  line-height: 1.5;
+}
+
+.build-panel__details dd span {
+  color: #da5c38;
+}
+
+.build-panel__action {
+  width: fit-content;
+  flex: none;
+  white-space: nowrap;
+}
+
 .button-disabled {
   display: inline-flex;
   min-height: 3rem;
@@ -2504,6 +2539,12 @@ button.filter-button {
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+  }
+
+  .build-panel__details {
+    flex: 1;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.5rem;
   }
 
   .project-gallery {

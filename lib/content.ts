@@ -22,7 +22,10 @@ export type ProjectFrontmatter = ContentFrontmatter & {
   gallerySlots: number;
   build: {
     platform: string;
+    version: string;
+    provider: string;
     url: string;
+    extractionCode: string;
   };
 };
 
@@ -130,7 +133,10 @@ export function getProjectBySlug(slug: string) {
     typeof build !== "object" ||
     build === null ||
     typeof (build as Record<string, unknown>).platform !== "string" ||
-    typeof (build as Record<string, unknown>).url !== "string"
+    typeof (build as Record<string, unknown>).version !== "string" ||
+    typeof (build as Record<string, unknown>).provider !== "string" ||
+    typeof (build as Record<string, unknown>).url !== "string" ||
+    typeof (build as Record<string, unknown>).extractionCode !== "string"
   ) {
     throw new Error(`Invalid or missing "build" for project ${slug}`);
   }

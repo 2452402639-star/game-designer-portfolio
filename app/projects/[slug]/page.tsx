@@ -272,13 +272,32 @@ export default async function ProjectDetailPage({
 
       <CaseSection index="07" label="PLAYABLE BUILD" title="试玩版本">
         <div className="build-panel">
-          <div>
-            <span className="section-kicker">PLATFORM</span>
-            <p>{frontmatter.build.platform}</p>
-          </div>
+          <dl className="build-panel__details">
+            <div>
+              <dt>PLATFORM</dt>
+              <dd>{frontmatter.build.platform}</dd>
+            </div>
+            <div>
+              <dt>VERSION</dt>
+              <dd>{frontmatter.build.version}</dd>
+            </div>
+            <div>
+              <dt>DOWNLOAD</dt>
+              <dd>
+                {frontmatter.build.provider} · 提取码：
+                <span>{frontmatter.build.extractionCode}</span>
+              </dd>
+            </div>
+          </dl>
           {frontmatter.build.url ? (
-            <a className="button-primary" href={frontmatter.build.url}>
-              试玩版本 ↗
+            <a
+              className="button-primary build-panel__action"
+              href={frontmatter.build.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`获取 ${frontmatter.build.version}（新标签页打开）`}
+            >
+              获取试玩版 ↗
             </a>
           ) : (
             <span className="button-disabled" aria-disabled="true">
