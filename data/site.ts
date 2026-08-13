@@ -54,10 +54,10 @@ export const projects: Project[] = [
     kind: "project",
     slug: "godot-game",
     index: "01",
-    title: "Godot 游戏项目",
+    title: "爱与刷刷与狗刀特",
     type: "个人游戏项目",
     description:
-      "使用 Godot 制作的个人游戏实践，围绕玩法实现、系统搭建与游戏开发流程进行探索。",
+      "一款融合自动战斗、幸存者式成长与守点塔防的轻量 Roguelite 游戏原型。",
     tags: ["Godot", "Game Development", "Game Design"],
     coverClass: "work-cover--godot",
     contentLabel: "PROJECT",

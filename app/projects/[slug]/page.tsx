@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MarkdownContent } from "@/components/markdown-content";
@@ -9,6 +10,74 @@ import {
 } from "@/lib/content";
 
 export const dynamicParams = false;
+
+const gallery = [
+  {
+    src: "/projects/ai-brush-rush/character-select.png",
+    alt: "《爱与刷刷与狗刀特》角色选择界面",
+    caption: "角色选择",
+    description: "不同角色对应不同战斗定位与专属武器。",
+  },
+  {
+    src: "/projects/ai-brush-rush/battlefield-select.png",
+    alt: "《爱与刷刷与狗刀特》战场选择界面",
+    caption: "战场选择",
+    description: "不同战场规则改变敌人节奏与局内压力。",
+  },
+  {
+    src: "/projects/ai-brush-rush/equipment-select.png",
+    alt: "《爱与刷刷与狗刀特》战前装备选择界面",
+    caption: "战前装备选择",
+    description: "局外保留装备可带入下一局，形成长期成长连接。",
+  },
+] as const;
+
+function getSubsections(markdown = "") {
+  const sections: { title: string; body: string }[] = [];
+  const matches = [...markdown.matchAll(/^###\s+(.+)$/gm)];
+
+  matches.forEach((match, index) => {
+    const start = (match.index ?? 0) + match[0].length;
+    const end = matches[index + 1]?.index ?? markdown.length;
+    sections.push({
+      title: match[1].trim(),
+      body: markdown.slice(start, end).trim(),
+    });
+  });
+
+  return sections;
+}
+
+function getOrderedItems(markdown: string) {
+  return [...markdown.matchAll(/^\d+\.\s+(.+)$/gm)].map((match) => match[1].trim());
+}
+
+function CaseSection({
+  index,
+  label,
+  title,
+  children,
+  withBorder = true,
+}: {
+  index: string;
+  label: string;
+  title: string;
+  children: React.ReactNode;
+  withBorder?: boolean;
+}) {
+  return (
+    <section className={`case-section ${withBorder ? "border-t border-[#191c1b]/15" : ""}`}>
+      <div className="case-section__label">
+        <span>{index}</span>
+        <p>{label}</p>
+      </div>
+      <div className="case-section__content">
+        <h2>{title}</h2>
+        {children}
+      </div>
+    </section>
+  );
+}
 
 export function generateStaticParams() {
   return getContentSlugs("projects").map((slug) => ({ slug }));
@@ -39,26 +108,17 @@ export default async function ProjectDetailPage({
   const { frontmatter } = project;
   const sections = getMarkdownSections(project.body);
   const overview = sections.get("overview");
-  const development = sections.get("design-and-development");
+  const coreLoop = getSubsections(sections.get("core-loop"));
+  const systemDesign = sections.get("system-design");
+  const designHighlights = sections.get("design-highlights");
+  const iteration = sections.get("iteration");
+  const roleAndAi = sections.get("role-ai-workflow");
+  const projectStatus = sections.get("project-status");
   const reflection = sections.get("reflection");
-  const developmentTopics = development
-    ? [...development.matchAll(/^###\s+(.+)$/gm)].map((match) => match[1].trim())
-    : [];
-  const builtGroups = [
-    {
-      title: "敌人与战斗",
-      items: ["敌人生成与状态管理", "Boss", "战斗数据"],
-    },
-    { title: "关卡循环", items: ["波次与关卡配置"] },
-    { title: "局外系统", items: ["装备系统", "仓库系统"] },
-    { title: "体验表现", items: ["HUD", "交互系统"] },
-  ].map((group) => ({
-    ...group,
-    items: group.items.filter((item) => frontmatter.implemented.includes(item)),
-  }));
-  const titleParts = frontmatter.title.split(" ");
-  const titleLead = titleParts.shift();
-  const titleRest = titleParts.join(" ");
+  const titleParts =
+    frontmatter.title === "爱与刷刷与狗刀特"
+      ? ["爱与刷刷与", "狗刀特"]
+      : [frontmatter.title];
 
   return (
     <main>
@@ -73,15 +133,20 @@ export default async function ProjectDetailPage({
             <div>
               <span className="page-kicker">PROJECT CASE STUDY / 01</span>
               <h1 className="case-title">
-                <span>{titleLead}</span>
-                {titleRest && (
-                  <span>
-                    {titleRest}<span className="text-[#da5c38]">.</span>
+                {titleParts.map((part, index) => (
+                  <span key={part}>
+                    {part}
+                    {index === titleParts.length - 1 && (
+                      <span className="text-[#da5c38]">.</span>
+                    )}
                   </span>
-                )}
+                ))}
               </h1>
-              <p className="mt-7 text-lg font-semibold tracking-[-0.02em] text-[#d2d7d2] sm:text-2xl">
-                {frontmatter.type}
+              <p className="mt-6 text-2xl font-semibold tracking-[-0.025em] text-[#f3f1eb] sm:text-3xl">
+                AI Brush Rush
+              </p>
+              <p className="mt-4 max-w-2xl text-sm leading-7 text-[#aeb4af] sm:text-base">
+                {frontmatter.description}
               </p>
             </div>
 
@@ -92,7 +157,7 @@ export default async function ProjectDetailPage({
               </div>
               <div>
                 <dt>TYPE</dt>
-                <dd>{frontmatter.category}</dd>
+                <dd>{frontmatter.type}</dd>
               </div>
               <div>
                 <dt>TOOL</dt>
@@ -111,131 +176,137 @@ export default async function ProjectDetailPage({
         </div>
       </section>
 
-      <div className="case-cover" aria-label="Godot 游戏项目封面占位">
-        <div className="case-cover__grid" />
-        <div className="case-cover__mark">GODOT / PROTOTYPE</div>
-        <div className="case-cover__shape" aria-hidden="true" />
-      </div>
+      <figure className="case-cover case-cover--image">
+        <Image
+          src={frontmatter.cover}
+          alt="《爱与刷刷与狗刀特》实机战斗画面"
+          width={1282}
+          height={752}
+          priority
+          sizes="(max-width: 1240px) calc(100vw - 40px), 1160px"
+        />
+        <figcaption>实机战斗 / IN-GAME BATTLE</figcaption>
+      </figure>
 
-      <section className="case-section">
-        <div className="case-section__label">
-          <span>01</span>
-          <p>OVERVIEW</p>
-        </div>
-        <div className="case-section__content">
-          <h2>项目概述</h2>
-          {overview && <MarkdownContent>{overview}</MarkdownContent>}
-        </div>
-      </section>
+      <CaseSection index="01" label="PROJECT OVERVIEW" title="项目概述" withBorder={false}>
+        {overview && <MarkdownContent>{overview}</MarkdownContent>}
+      </CaseSection>
 
-      <section className="case-section border-t border-[#191c1b]/15">
-        <div className="case-section__label">
-          <span>02</span>
-          <p>WHAT I BUILT</p>
-        </div>
-        <div className="case-section__content">
-          <h2>已实现内容</h2>
-          <div className="built-groups">
-            {builtGroups.map((group, groupIndex) => (
-              <div key={group.title} className="built-group">
-                <div className="built-group__heading">
-                  <span>{String(groupIndex + 1).padStart(2, "0")}</span>
-                  <h3>{group.title}</h3>
-                </div>
-                <ul>
-                  {group.items.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="case-section border-t border-[#191c1b]/15">
-        <div className="case-section__label">
-          <span>03</span>
-          <p>DESIGN &amp; DEVELOPMENT</p>
-        </div>
-        <div className="case-section__content">
-          <h2>设计与开发</h2>
-          <div className="development-outline">
-            <ul aria-label="待整理章节">
-              {developmentTopics.map((topic, index) => (
-                <li key={topic}>
-                  <span>{String(index + 1).padStart(2, "0")}</span>
-                  {topic}
-                </li>
-              ))}
-            </ul>
-            <div className="content-pending">
-              <span className="size-2 bg-[#94a66c]" aria-hidden="true" />
-              <p>内容整理中</p>
+      <CaseSection index="02" label="CORE LOOP" title="核心玩法循环">
+        <div className="loop-groups">
+          {coreLoop.map((loop) => (
+            <div key={loop.title} className="loop-group">
+              <h3>{loop.title}</h3>
+              <ol>
+                {getOrderedItems(loop.body).map((item, index) => (
+                  <li key={item}>
+                    <span>{String(index + 1).padStart(2, "0")}</span>
+                    <p>{item}</p>
+                    {index < getOrderedItems(loop.body).length - 1 && (
+                      <i aria-hidden="true">→</i>
+                    )}
+                  </li>
+                ))}
+              </ol>
             </div>
-          </div>
+          ))}
         </div>
-      </section>
+      </CaseSection>
+
+      <CaseSection index="03" label="SYSTEM DESIGN" title="系统设计">
+        {systemDesign && (
+          <div className="case-subsections">
+            <MarkdownContent>{systemDesign}</MarkdownContent>
+          </div>
+        )}
+      </CaseSection>
+
+      <CaseSection index="04" label="DESIGN HIGHLIGHTS" title="重点设计">
+        {designHighlights && (
+          <div className="highlight-content">
+            <MarkdownContent>{designHighlights}</MarkdownContent>
+          </div>
+        )}
+      </CaseSection>
+
+      <CaseSection index="05" label="ITERATION" title="设计迭代">
+        {iteration && (
+          <div className="iteration-content">
+            <MarkdownContent>{iteration}</MarkdownContent>
+          </div>
+        )}
+      </CaseSection>
 
       <section className="bg-[#191c1b] text-[#f3f1eb]">
         <div className="mx-auto max-w-[1240px] px-5 py-20 sm:px-8 sm:py-28 lg:px-10">
           <div className="flex flex-col gap-5 border-b border-white/15 pb-8 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <span className="page-kicker">04 / GALLERY</span>
+              <span className="page-kicker">06 / GALLERY</span>
               <h2 className="mt-4 text-4xl font-semibold tracking-[-0.045em] sm:text-5xl">
                 项目画面
               </h2>
             </div>
             <p className="font-mono text-[10px] tracking-[0.12em] text-[#9da49f]">
-              实际素材待补充
+              REAL PROJECT CAPTURES
             </p>
           </div>
-          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {Array.from({ length: frontmatter.gallerySlots }, (_, index) => (
-              <div key={index} className="gallery-placeholder">
-                <span>MEDIA_{String(index + 1).padStart(2, "0")}</span>
-                <p>截图 / GIF 占位</p>
-              </div>
+          <div className="project-gallery">
+            {gallery.map((image) => (
+              <figure key={image.src}>
+                <Image
+                  src={image.src}
+                  alt={image.alt}
+                  width={1282}
+                  height={752}
+                  sizes="(max-width: 767px) calc(100vw - 40px), (max-width: 1240px) calc(50vw - 44px), 560px"
+                />
+                <figcaption>
+                  <strong>{image.caption}</strong>
+                  <span>{image.description}</span>
+                </figcaption>
+              </figure>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="case-section">
-        <div className="case-section__label">
-          <span>05</span>
-          <p>PLAYABLE BUILD</p>
-        </div>
-        <div className="case-section__content">
-          <h2>试玩版本</h2>
-          <div className="build-panel">
-            <div>
-              <span className="section-kicker">PLATFORM</span>
-              <p>{frontmatter.build.platform}</p>
-            </div>
-            {frontmatter.build.url ? (
-              <a className="button-primary" href={frontmatter.build.url}>
-                试玩版本 ↗
-              </a>
-            ) : (
-              <span className="button-disabled" aria-disabled="true">
-                链接整理中
-              </span>
-            )}
+      <CaseSection index="07" label="PLAYABLE BUILD" title="试玩版本">
+        <div className="build-panel">
+          <div>
+            <span className="section-kicker">PLATFORM</span>
+            <p>{frontmatter.build.platform}</p>
           </div>
+          {frontmatter.build.url ? (
+            <a className="button-primary" href={frontmatter.build.url}>
+              试玩版本 ↗
+            </a>
+          ) : (
+            <span className="button-disabled" aria-disabled="true">
+              链接整理中
+            </span>
+          )}
         </div>
-      </section>
+      </CaseSection>
 
-      <section className="case-section border-t border-[#191c1b]/15">
-        <div className="case-section__label">
-          <span>06</span>
-          <p>REFLECTION</p>
-        </div>
-        <div className="case-section__content">
-          <h2>项目总结</h2>
-          {reflection && <MarkdownContent>{reflection}</MarkdownContent>}
-        </div>
-      </section>
+      <CaseSection index="08" label="ROLE & AI WORKFLOW" title="个人职责与 AI 协作">
+        {roleAndAi && (
+          <div className="role-content">
+            <MarkdownContent>{roleAndAi}</MarkdownContent>
+          </div>
+        )}
+      </CaseSection>
+
+      <CaseSection index="09" label="PROJECT STATUS" title="项目现状">
+        {projectStatus && (
+          <div className="status-content">
+            <MarkdownContent>{projectStatus}</MarkdownContent>
+          </div>
+        )}
+      </CaseSection>
+
+      <CaseSection index="10" label="REFLECTION" title="项目总结">
+        {reflection && <MarkdownContent>{reflection}</MarkdownContent>}
+      </CaseSection>
     </main>
   );
 }
